@@ -1,0 +1,46 @@
+@import './reset.css';
+
+.container {
+  position: relative;
+  margin: 0 auto;
+  background-color: #a7adccdd;
+  padding: 20px;
+}
+
+.todoList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 150px;
+    padding: 8px;
+    border: solid 1px #fff;
+    border-radius: 5px;
+  }
+}
+
+.btn {
+  background-color: #fff;
+  border: solid 1px #fff;
+}
+
+.addWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  height: 45px;
+
+  input {
+    width: 300px;
+    margin-right: 8px;
+  }
+
+  .add {
+    height: 100%;
+    box-sizing: border-box;
+  }
+}
