@@ -52,7 +52,7 @@ module.exports = {
   },
   devServer: {
     host: 'localhost',
-    port: 8888,
+    port: 1111,
   },
   plugins: [
     new CleanWebpackPlugin(),
