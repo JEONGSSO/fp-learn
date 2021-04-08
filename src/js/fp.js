@@ -62,6 +62,11 @@ Fp.range = (start, stop, step = 1) => {
   return arr;
 };
 
+Fp.tap = Fp.curry((f, val) => {
+  f(val);
+  return val;
+});
+
 Fp.join = Fp.curry((sep = ',', list) => Fp.reduce((pre, val) => pre + sep + val, list));
 
 export { L, Fp };

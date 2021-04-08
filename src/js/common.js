@@ -6,6 +6,7 @@ const containerEl = qs('.container');
 const todoListEl = qs('.todoList');
 const inputEl = qs('.todoInput');
 const addBtnEl = qs('.addWrap .btn', qs('.container'));
+const footerEl = qs('.footer');
 
 const fetchData = (url, options = {}) => window.fetch(url, options).then((res) => res.json());
 const fetchOptions = (method) => {
@@ -17,4 +18,15 @@ const fetchOptions = (method) => {
   };
 };
 
-export { qs, qsa, onEvent, fetchData, fetchOptions, containerEl, todoListEl, inputEl, addBtnEl };
+export {
+  qs,
+  qsa,
+  onEvent,
+  fetchData,
+  fetchOptions,
+  containerEl,
+  todoListEl,
+  inputEl,
+  addBtnEl,
+  footerEl,
+};

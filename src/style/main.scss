@@ -1,15 +1,18 @@
 @import './reset.css';
 
+body {
+  background-color: #a7adccdd;
+}
+
 .container {
   position: relative;
   margin: 0 auto;
-  background-color: #a7adccdd;
   padding: 20px;
 }
 
 .todoList {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 8px;
 
   .item {
@@ -31,7 +34,7 @@
 .addWrap {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-bottom: 20px;
   height: 45px;
 
   input {
@@ -42,5 +45,11 @@
   .add {
     height: 100%;
     box-sizing: border-box;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .todoList {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
