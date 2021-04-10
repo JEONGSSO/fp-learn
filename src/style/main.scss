@@ -8,48 +8,68 @@ body {
   position: relative;
   margin: 0 auto;
   padding: 20px;
-}
 
-.todoList {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
+  .todoList {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
 
-  .item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 150px;
-    padding: 8px;
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 75px;
+      padding: 8px;
+      border: solid 1px #fff;
+      border-radius: 5px;
+      animation: append 1s;
+
+      @keyframes append {
+        from {
+          transform: translateY(10px);
+        }
+
+        to {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  .btn {
+    background-color: #fff;
     border: solid 1px #fff;
-    border-radius: 5px;
-  }
-}
-
-.btn {
-  background-color: #fff;
-  border: solid 1px #fff;
-}
-
-.addWrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  height: 45px;
-
-  input {
-    width: 300px;
-    margin-right: 8px;
   }
 
-  .add {
-    height: 100%;
-    box-sizing: border-box;
+  .addWrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    height: 45px;
+
+    input {
+      width: 80%;
+      margin-right: 8px;
+    }
+
+    .add {
+      width: calc(20% - 8px);
+      height: 100%;
+      box-sizing: border-box;
+    }
   }
 }
 
 @media screen and (min-width: 769px) {
-  .todoList {
-    grid-template-columns: repeat(3, 1fr);
+  .container {
+    .todoList {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .addWrap {
+      input {
+        width: 300px;
+      }
+    }
   }
 }

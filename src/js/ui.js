@@ -3,6 +3,8 @@ import {
   qs,
   qsa,
   onEvent,
+  fetchData,
+  fetchOptions,
   containerEl,
   todoListEl,
   addBtnEl,
@@ -12,8 +14,13 @@ import {
 import intersectionOb from './util/intersectionOb';
 
 const makeHtml = Fp.curry((f, iter) => Fp.reduce(f, iter, ''));
-const appendHtml = Fp.curry((target, html) => target.insertAdjacentHTML('afterbegin', html));
+const appendHtml = Fp.curry((target, html) => {
+  target.insertAdjacentHTML('beforeend', html);
+  return target;
+});
 const render = Fp.curry((makeFn, targetEl) => Fp.pipe(makeHtml(makeFn), appendHtml(targetEl)));
+
+const lastChild = Fp.curry((target, parent) => qs(`${target}:last-child`, parent));
 
 const templateMaker = (template) => (pre, item) => pre + template(item);
 
@@ -28,19 +35,21 @@ const listHtml = (item) => `
 `;
 const listMaker = templateMaker(listHtml);
 
-const addItem = ({ target }) => {
-  if (target.tagName !== 'BUTTON') return;
+const emptyInput = (targetEl) => (targetEl.value = '');
+
+const addItem = ({ type, keyCode }) => {
+  if (type === 'keyup' && keyCode !== 13) return;
   if (!inputEl.value) return;
 
   const data = [
     {
-      id: 3,
+      id: Math.floor(Math.random() * 1000),
       title: inputEl.value,
       done: false,
     },
   ];
-  Fp.go1(data, render(listMaker, todoListEl));
-  inputEl.value = '';
+
+  Fp.go1(data, render(listMaker, todoListEl), () => Fp.tap(emptyInput)(inputEl));
 };
 
 const removeItem = ({ target }) => {
@@ -50,26 +59,49 @@ const removeItem = ({ target }) => {
 
 onEvent('click', todoListEl, removeItem);
 onEvent('click', addBtnEl, addItem);
-
-const lastChild = () => qs('li:last-child', todoListEl);
+onEvent('keyup', inputEl, addItem);
 
 const fetchMore = (data) => {
   Fp.go1(data, render(listMaker, todoListEl));
 };
 
-const observerFn = (entries) => {
-  if (!todoListEl.childElementCount) return;
-  entries.forEach((entry) => {
-    entry.isIntersecting && fetchMore(Fp.range(2));
+let todoCount; // side effect
+const observerFn = (entries, observer) => {
+  const childCount = todoListEl.childElementCount;
+  if (!childCount) return;
+
+  entries.forEach(async (entry) => {
+    if (entry.isIntersecting) {
+      const data = await fetchData(
+        `https://jsonplaceholder.typicode.com/todos/${++todoCount}`,
+        fetchOptions('get')
+      );
+
+      if (!Object.keys(data).length) {
+        observer.disconnect();
+        return;
+      }
+
+      fetchMore([data]);
+    }
+    observer.unobserve(entry.target);
+    observer.observe(lastChild('li', todoListEl));
   });
 };
 
 const options = {
-  threshold: 0.1,
+  threshold: 0.8,
 };
 
 const moreObserver = intersectionOb(observerFn, options);
 
-const initList = (data, limit = 10) => Fp.go1(data, Fp.take(limit), render(listMaker, todoListEl));
+// QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
+
+const lastItemObserver = (target) => Fp.pipe(lastChild('li')(target), moreObserver.observe(target));
+
+const initList = async (data, limit = 10) => {
+  await Fp.go1(data, Fp.take(limit), render(listMaker, todoListEl), lastItemObserver);
+  todoCount = 190;
+};
 
 export { makeHtml, appendHtml, initList };
