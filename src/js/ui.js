@@ -95,8 +95,6 @@ const options = {
 
 const moreObserver = intersectionOb(observerFn, options);
 
-// QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
-
 const lastItemObserver = (target) => Fp.pipe(lastChild('li')(target), moreObserver.observe(target));
 
 const initList = async (data, limit = 10) => {
