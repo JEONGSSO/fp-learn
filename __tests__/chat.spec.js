@@ -1,18 +1,14 @@
-const fetchData = (url, options = {}) => window.fetch(url, options).then((res) => res.json());
+const fetch = require('node-fetch');
 
 describe('learn Fp', () => {
-  // let res;
-  // let template;
-  // let removeBtnEl;
-  // let addBtnEl;
+  let res;
+  const fetchData = (url, options = {}) => fetch(url, options).then((res) => res.json());
 
-  // beforeEach(async () => {
-  //   res = await fetchData('https://jsonplaceholder.typicode.com/todos/1');
-  //   removeBtnEl = qs('.btn.remove');
-  //   addBtnEl = qs('.btn.add');
-  // });
+  beforeEach(async () => {
+    res = await fetchData('https://jsonplaceholder.typicode.com/todos/1');
+  });
 
-  it('test', async () => {
-    expect(true).toBe(true);
+  it('fetch test', async () => {
+    expect(res).toEqual({ userId: 1, id: 1, title: 'delectus aut autem', completed: false });
   });
 });
